@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ตะกร้าสินค้า</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<!--เมนู-->
+<div id="menu-container"></div>
+
+<div class="container py-5">
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <h3 class="mb-4">🛒 ตะกร้าสินค้า</h3>
+
+      <!-- ปุ่มล้างตะกร้า -->
+      <div class="mb-3 text-end">
+        <button class="btn btn-danger btn-sm" onclick="clearCart()">
+          ล้างตะกร้าทั้งหมด
+        </button>
+      </div>
+
+      <!-- ข้อความเมื่อไม่มีสินค้า -->
+      <div id="emptyMessage" class="text-center text-muted my-4" style="display:none;">
+        ยังไม่มีสินค้าในตะกร้า
+      </div>
+
+      <div class="table-responsive" id="cartSection">
+        <table class="table table-bordered align-middle text-center">
+          <thead class="table-primary">
+            <tr>
+              <th>สินค้า</th>
+              <th>ราคา</th>
+              <th width="180">จำนวน</th>
+              <th>รวม</th>
+              <th>ลบ</th>
+            </tr>
+          </thead>
+          <tbody id="cartTable"></tbody>
+        </table>
+      </div>
+
+      <div class="row mt-4" id="summarySection">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+          <div class="border rounded p-3 bg-white">
+            <h5>สรุปคำสั่งซื้อ</h5>
+            <hr>
+            <div class="d-flex justify-content-between">
+              <span>ราคารวม</span>
+              <strong id="totalPrice">0</strong> บาท
+            </div>
+            <button class="btn btn-primary w-100 mt-3">
+              ดำเนินการชำระเงิน
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function loadCart() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const table = document.getElementById("cartTable");
+  const emptyMessage = document.getElementById("emptyMessage");
+  const cartSection = document.getElementById("cartSection");
+  const summarySection = document.getElementById("summarySection");
+
+  table.innerHTML = "";
+  let total = 0;
+
+  if(cart.length === 0){
+    emptyMessage.style.display = "block";
+    cartSection.style.display = "none";
+    summarySection.style.display = "none";
+    return;
+  } else {
+    emptyMessage.style.display = "none";
+    cartSection.style.display = "block";
+    summarySection.style.display = "flex";
+  }
+
+  cart.forEach((item, index) => {
+  const subtotal = item.price * item.qty;
+  total += subtotal;
+
+  table.innerHTML += `
+    <tr>
+      <td class="text-start"><strong>${item.name}</strong></td>
+      <td>${item.price.toLocaleString()}</td>
+      <td>
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${index}, -1)">−</button>
+          <input type="text" class="form-control text-center mx-2" value="${item.qty}" style="width:60px;" readonly>
+          <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${index}, 1)">+</button>
+        </div>
+      </td>
+      <td>${subtotal.toLocaleString()}</td>
+      <td>
+        <button class="btn btn-sm btn-danger" onclick="removeItem(${index})">✕</button>
+      </td>
+    </tr>
+  `;
+});
+
+document.getElementById("totalPrice").innerText = total.toLocaleString();
+}
+
+function changeQty(index, amount) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart[index].qty += amount;
+
+  if(cart[index].qty <= 0){
+    cart.splice(index, 1);
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  loadCart();
+}
+
+function removeItem(index){
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  loadCart();
+}
+
+function clearCart(){
+  localStorage.removeItem("cart");
+  loadCart();
+}
+
+loadCart();
+</script>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/menu.js"></script>
+
+</body>
+</html>
