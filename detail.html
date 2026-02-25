@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>รายละเอียดสินค้า</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <!-- เมนู -->
+    <div id="menu-container"></div>
+
+    <div class="container py-5">
+        <div class="card shadow-sm">
+            <div class="row g-0 align-items-center">
+
+                <!-- รูปสินค้า -->
+                <div class="col-md-5 text-center p-4">
+                    <img src="img/Coal.webp" class="img-fluid rounded" alt="Product Image">
+                </div>
+
+                <!-- รายละเอียดสินค้า -->
+                <div class="col-md-7">
+                    <div class="card-body">
+
+                        <h3 class="card-title fw-bold">Laptop Gaming</h3>
+                        <h4 class="text-danger">฿25,900</h4>
+
+                        <div class="mb-3 mt-3">
+                            <label class="form-label">จำนวน</label>
+                            <input type="number" class="form-control w-25" value="1" min="1">
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success">
+                                Add to Cart
+                            </button>
+
+                            <a href="Cart.html" class="btn btn-warning">
+                                ไปที่ตะกร้า
+                            </a>
+
+                            <a href="Product.html" class="btn btn-outline-primary btn-sm">
+                                กลับ
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/menu.js"></script>
+
+</body>
+</html>
