@@ -8,53 +8,97 @@
 
 <body class="bg-light">
 
-    <!-- เมนู -->
-    <div id="menu-container"></div>
+<!--เมนู-->
+<div id="menu-container"></div>
 
-    <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="row g-0 align-items-center">
+<div class="container py-5">
+    <div class="card shadow-sm">
+        <div class="row g-0 align-items-center">
 
-                <!-- รูปสินค้า -->
-                <div class="col-md-5 text-center p-4">
-                    <img src="img/Coal.webp" class="img-fluid rounded" alt="Product Image">
-                </div>
-
-                <!-- รายละเอียดสินค้า -->
-                <div class="col-md-7">
-                    <div class="card-body">
-
-                        <h3 class="card-title fw-bold">Laptop Gaming</h3>
-                        <h4 class="text-danger">฿25,900</h4>
-
-                        <div class="mb-3 mt-3">
-                            <label class="form-label">จำนวน</label>
-                            <input type="number" class="form-control w-25" value="1" min="1">
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-success">
-                                Add to Cart
-                            </button>
-
-                            <a href="Cart.html" class="btn btn-warning">
-                                ไปที่ตะกร้า
-                            </a>
-
-                            <a href="Product.html" class="btn btn-outline-primary btn-sm">
-                                กลับ
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-
+            <!-- รูปสินค้า -->
+            <div class="col-md-5 text-center p-4">
+                <img id="productImage" src="" class="img-fluid rounded">
             </div>
+
+            <!-- รายละเอียดสินค้า -->
+            <div class="col-md-7">
+                <div class="card-body">
+
+                    <h3 class="card-title fw-bold"></h3>
+                    <h4 class="text-danger"></h4>
+
+                    <div class="mb-3 mt-3">
+                        <label class="form-label">จำนวน</label>
+                        <input type="number" class="form-control w-25" value="1" min="1">
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-success">
+                            Add to Cart
+                        </button>
+
+                        <a href="Cart.html" class="btn btn-warning">
+                            ไปที่ตะกร้า
+                        </a>
+
+                        <a href="Product.html" class="btn btn-outline-primary btn-sm">
+                            กลับ
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/menu.js"></script>
+<script>
+const products = {
+  1: { name: "Coal", price: 150, img: "img/Coal.webp" },
+  2: { name: "Iron Ingot", price: 250, img: "img/Iron ingot.jfif" },
+  3: { name: "Lapis", price: 100, img: "img/Lapis.jfif" },
+  4: { name: "Emerald", price: 500, img: "img/Enerald.png" },
+  5: { name: "Diamond", price: 750, img: "img/Diamond.jfif" },
+  6: { name: "Netherite", price: 1250, img: "img/Netherite.jfif" },
+  7: { name: "Gold", price: 499, img: "img/Gold.jfif" },
+  8: { name: "Villager", price: 1500, img: "img/Villager.jfif" },
+  9: { name: "Enchant Golden Apple", price: 890, img: "img/Apple God.jfif" },
+  10:{ name: "Sword Netherite", price: 1500, img: "img/Sword Netherite Enchantment.jpg" },
+  11:{ name: "Pickaxe Netherite", price: 3500, img: "img/Pickaxe Netherite Enc.jfif" },
+  12:{ name: "Mojang", price: 6500000000, img: "img/Mojang.jpg" }
+};
 
-</body>
-</html>
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+const product = products[productId];
+
+if(product){
+  document.querySelector(".card-title").innerText = product.name;
+  document.querySelector(".text-danger").innerText = product.price + "B";
+  document.getElementById("productImage").src = product.img;
+}
+
+document.querySelector(".btn-success").addEventListener("click", () => {
+  const qty = parseInt(document.querySelector("input[type='number']").value);
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existing = cart.find(item => item.id == productId);
+
+  if(existing){
+    existing.qty += qty;
+  } else {
+    cart.push({
+      id: productId,
+      name: product.name,
+      price: product.price,
+      qty: qty
+    });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // กลับหน้า Product ทันที
+  window.location.href = "Product.html";
+});
+</script>
